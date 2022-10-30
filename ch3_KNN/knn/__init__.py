@@ -25,9 +25,14 @@ class KNN(object):
         self.label = label
 
     def predict(self, x):
-        dis = [sqrt(np.sum((xtrain - x) ** 2)) for xtrain in self.data]  # p=2欧式距离
-        nearest = np.argsort(dis)
+        dis = [sqrt(np.sum((xtrain - x) ** 2)) for xtrain in self.data]  # p=2 欧式距离
+        # print('dis:',dis)
+        # 根据距离进行排序，这里返回的是相应的索引号
+        nearest = np.argsort(dis) # argsort()函数是将x中的元素从小到大排列，提取其对应的index(索引)，然后输出到y
+        # print("nearest:",nearest)
+        # 获取前k个标签topK_y
         topk_y = [self.label[i] for i in nearest[:self.k]]
+        # 计算topK_y中每种标签的数量，votes是个字典
         votes = Counter(topk_y)
         return votes.most_common(1)[0][0]
 
@@ -44,7 +49,6 @@ def createdata(n):
     '''
     x, y = make_classification(n_samples=n, n_features=2, n_redundant=0, n_informative=1, n_clusters_per_class=1)
     return x, y
-
 
 # 生成120个样本，前100个样本用作训练集，其余的用作测试集建立KNN分类器，K值取2，进行测试
 data, label = createdata(120)
